@@ -1,0 +1,38 @@
+- name: Big Basic Network Config
+  hosts: CSR1kv
+  tasks:
+    - name: Line Con Password
+      ios_command:
+        commands:
+          - "line con 0"
+          - "password cisco"
+          - "login"
+        authorize: yes
+        wait_for_connection: yes
+        
+    - name: Privileged Exec Password
+      ios_command:
+        commands:
+          - "enable secret cisco"
+        authorize: yes
+        wait_for_connection: yes
+
+    - name: Set MOTD banner
+      ios_banner:
+        banner: login
+        text: "Unauthorized Access is prohibited and highly discouraged."
+
+    - name: Configure/Create VLANs
+      ios_vlan:
+        vlan_id: 10
+        vlan_id: 20
+        state: present
+
+    - name: Configuring Interfaces to be ready
+      ios_interface:
+        name: GigabitEthernet0/0
+        state: present
+        enabled: true
+        
+    
+    
